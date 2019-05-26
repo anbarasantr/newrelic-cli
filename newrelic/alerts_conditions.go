@@ -107,6 +107,48 @@ func (s *AlertsConditionsService) Update(ctx context.Context, cat ConditionCateg
 	return condition, resp, err
 }
 
+// check whether the alert condition name is already created for that alert policy.
+// if yes, update the alert or create new alert
+func (s *AlertsConditionsService) Upsert(ctx context.Context, opt *AlertsConditionsOptions, cat ConditionCategory, c *AlertsConditionEntity, policyId int64) (*AlertsConditionEntity, *Response, error) {
+	list := new(AlertsConditionList)
+	listFunc := s.listByCategory(cat)
+	resp, err := listFunc(ctx, list, opt)
+	if err != nil {
+		return nil, resp, err
+	}
+
+	var condition *AlertsConditionEntity
+	var alertConditionId *int64
+
+	for _, remoteAlertCondition := range list.AlertsDefaultConditionList.AlertsDefaultConditions {
+		if *c.AlertsDefaultCondition.Name == *remoteAlertCondition.Name {
+			alertConditionId = remoteAlertCondition.ID
+		}
+
+	}
+
+	if alertConditionId != nil {
+		fmt.Println("Its an existing alert")
+		fmt.Println("-----------------------------------------------------")
+		fmt.Printf("Alert ID %d\n", *alertConditionId)
+		fmt.Printf("Alert Policy ID %d\n", policyId)
+		fmt.Println("")
+		updateFunc := s.updateByCategory(cat)
+		condition, resp, err = updateFunc(ctx, c, *alertConditionId)
+		fmt.Println("-----------------------------------------------------")
+
+	} else {
+		fmt.Println("Its a new Alert")
+		fmt.Println("-----------------------------------------------------")
+		fmt.Printf("Alert Policy ID %d\n", policyId)
+		createFunc := s.createByCategory(cat)
+		condition, resp, err = createFunc(ctx, c, policyId)
+		fmt.Println("-----------------------------------------------------")
+	}
+
+	return condition, resp, err
+}
+
 func (s *AlertsConditionsService) DeleteByID(ctx context.Context, cat ConditionCategory, conditionID int64) (*Response, error) {
 	deleteFunc := s.deleteByCategory(cat)
 	resp, err := deleteFunc(ctx, conditionID)

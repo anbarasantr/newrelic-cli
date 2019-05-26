@@ -19,17 +19,18 @@ import (
 	"fmt"
 	"os"
 
-	addCmd "github.com/IBM/newrelic-cli/cmd/add"
-	backupCmd "github.com/IBM/newrelic-cli/cmd/backup"
-	createCmd "github.com/IBM/newrelic-cli/cmd/create"
-	deleteCmd "github.com/IBM/newrelic-cli/cmd/delete"
-	getCmd "github.com/IBM/newrelic-cli/cmd/get"
 	insertCmd "github.com/IBM/newrelic-cli/cmd/insert"
-	patchCmd "github.com/IBM/newrelic-cli/cmd/patch"
-	restoreCmd "github.com/IBM/newrelic-cli/cmd/restore"
-	takeCmd "github.com/IBM/newrelic-cli/cmd/take"
-	updateCmd "github.com/IBM/newrelic-cli/cmd/update"
-	homedir "github.com/mitchellh/go-homedir"
+	addCmd "github.com/anbarasantr/newrelic-cli/cmd/add"
+	backupCmd "github.com/anbarasantr/newrelic-cli/cmd/backup"
+	createCmd "github.com/anbarasantr/newrelic-cli/cmd/create"
+	deleteCmd "github.com/anbarasantr/newrelic-cli/cmd/delete"
+	getCmd "github.com/anbarasantr/newrelic-cli/cmd/get"
+	patchCmd "github.com/anbarasantr/newrelic-cli/cmd/patch"
+	restoreCmd "github.com/anbarasantr/newrelic-cli/cmd/restore"
+	takeCmd "github.com/anbarasantr/newrelic-cli/cmd/take"
+	updateCmd "github.com/anbarasantr/newrelic-cli/cmd/update"
+	upsertCmd "github.com/anbarasantr/newrelic-cli/cmd/upsert"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -82,6 +83,7 @@ func init() {
 	rootCmd.AddCommand(addCmd.AddCmd)
 	rootCmd.AddCommand(insertCmd.InsertCmd)
 	rootCmd.AddCommand(takeCmd.TakeCmd)
+	rootCmd.AddCommand(upsertCmd.UpsertCmd)
 }
 
 // initConfig reads in config file and ENV variables if set.
